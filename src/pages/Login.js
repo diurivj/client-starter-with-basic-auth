@@ -44,7 +44,7 @@ export default class Login extends Component {
       })
       .catch(({ response }) => {
         // we set the error in context if there's an error
-        this.context.setError(response.data.message)
+        this.context.setError(response.data.err.message)
       })
   }
 

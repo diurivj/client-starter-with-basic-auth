@@ -6,7 +6,7 @@ import { signup } from '../services/auth'
 export default class Signup extends Component {
   state = {
     formValues: {
-      username: '',
+      name: '',
       email: '',
       password: ''
     },
@@ -36,7 +36,7 @@ export default class Signup extends Component {
 
         this.setState({
           formValues: {
-            username: '',
+            name: '',
             email: '',
             password: ''
           }
@@ -57,10 +57,10 @@ export default class Signup extends Component {
       <section>
         <AuthForm title="Signup" submit={this.handleSubmit}>
           <FormInput
-            label="Username"
-            name="username"
+            label="Name"
+            name="name"
             type="text"
-            placeholder="Type your username"
+            placeholder="Type your name"
             value={formValues.username}
             onChange={this.handleInputs}
           />
