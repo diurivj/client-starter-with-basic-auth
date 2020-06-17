@@ -19,6 +19,10 @@ export const logout = () => {
   return service.post('/logout')
 }
 
-export const getUser = () => {
-  return service.get('/isLoggedIn')
+export const getUser = token => {
+  return service.get('/isLoggedIn', {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  })
 }

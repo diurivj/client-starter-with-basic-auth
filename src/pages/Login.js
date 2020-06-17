@@ -33,7 +33,14 @@ export default class Login extends Component {
 
     login(this.state.formValues)
       .then(({ data }) => {
-        // we consume the function from the context in order to set the logged user in the context
+        console.log(data)
+
+        // we set the token in local storage to persist the user logged in
+        localStorage.setItem('token', data.token)
+
+        // we consume the function from the context in order to set the logged user and the token in the context
+        this.context.setToken(data.token)
+
         this.context.setUser(data.user)
 
         // we clean the inputs

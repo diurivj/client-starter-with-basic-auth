@@ -7,27 +7,34 @@ export default class AuthProvider extends Component {
   state = {
     user: null,
     error: null,
-    loading: true
+    loading: true,
+    token: null
   }
 
   componentDidMount() {
     // check if there's a user already logged in
-    getUser()
-      .then(({ data }) => {
-        if (data.message === 'Unauthorized access!') {
-          this.setState({ user: null })
-        } else {
-          this.setState({ user: data.user })
-        }
-      })
-      .catch(({ response }) => {
-        // here is the error from the server
-        // console.log(response.data)
-        this.setState({ user: null, error: null })
-      })
-      .finally(() => {
-        this.setState({ loading: false, error: null })
-      })
+    const token = localStorage.getItem('token')
+
+    if (token) {
+      getUser(token)
+        .then(({ data }) => {
+          if (data.message === 'Unauthorized access!') {
+            this.setState({ user: null })
+          } else {
+            this.setState({ user: data.user, token })
+          }
+        })
+        .catch(({ response }) => {
+          // here is the error from the server
+          // console.log(response.data)
+          this.setState({ user: null, error: null })
+        })
+        .finally(() => {
+          this.setState({ loading: false, error: null })
+        })
+    } else {
+      this.setState({ user: null, error: null, loading: false, token: null })
+    }
   }
 
   // save the logged user in the context in order to persist it.
@@ -40,6 +47,10 @@ export default class AuthProvider extends Component {
     this.setState({ error })
   }
 
+  setToken = token => {
+    this.setState({ token })
+  }
+
   // remove the logged user from context.
   removeUser = async () => {
     await logout()
@@ -47,10 +58,10 @@ export default class AuthProvider extends Component {
   }
 
   render() {
-    const { setUser, removeUser, setError, state } = this
+    const { setUser, removeUser, setError, setToken, state } = this
 
     return (
-      <AuthContext.Provider value={{ ...state, setError, setUser, removeUser }}>
+      <AuthContext.Provider value={{ ...state, setError, setUser, setToken, removeUser }}>
         {this.props.children}
       </AuthContext.Provider>
     )
